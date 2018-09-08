@@ -29,6 +29,16 @@ app.use('/api', authCheckMiddleware);
 require('./routes/authRoutes')(app);
 require('./routes/apiRoutes')(app);
 
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+
+  const path = require('path');
+  app.get('*', (req, res) => {
+    console.log('fallback');
+    res.sendfile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
+
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);
 });
