@@ -216,6 +216,8 @@ class LoginRegister extends Component {
   }
 
   renderError() {
+    console.log(this.props.auth.error);
+
     if (this.props.auth.error) {
       const error = this.props.auth.error;
 
