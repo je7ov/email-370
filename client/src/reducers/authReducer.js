@@ -26,12 +26,12 @@ export default function(
       return newState;
 
     case FETCH_USER:
-      console.log(payload);
-
       if (!payload.success) {
         newState.user = null;
         newState.success = false;
         newState.error = payload.error;
+
+        return newState;
       }
 
       newState.user = payload.user;

@@ -20,6 +20,8 @@ export const fetchUser = () => async dispatch => {
     headers: { Authorization: `Bearer ${Auth.getToken()}` }
   });
 
+  console.log(res);
+
   dispatch({ type: FETCH_USER, payload: res.data });
 };
 
