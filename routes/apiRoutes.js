@@ -10,13 +10,12 @@ module.exports = app => {
   });
 
   app.get('/api/current_user', async (req, res) => {
-    console.log(req.headers.authorization.split(' ')[1]);
     const token = req.headers.authorization.split(' ')[1];
     const decoded = jwt.verify(token, keys.jwtSecret);
     const userId = decoded.sub;
 
     const userData = await User.findById(userId);
-    console.log(userData);
+
     const user = {
       username: userData.username,
       domain: userData.domain

@@ -40,8 +40,6 @@ module.exports = app => {
       return res.status(400).json(validPasswordError);
     }
 
-    console.log('input: ', username, domain, password);
-
     // Check if username is taken
     const existingUser = await User.findOne({ username, domain });
     if (existingUser) {
