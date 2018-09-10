@@ -20,7 +20,7 @@ export default function(
       newState.drafts = [];
       return newState;
     case SEND_EMAIL:
-      newState.success = true;
+      newState.success = payload.success;
       return newState;
     case EMAIL_ERROR:
       newState.success = false;

@@ -12,7 +12,11 @@ class EmailList extends Component {
       return (
         <ul>
           {emails.map((email, i) => (
-            <li className="row list" key={i}>
+            <li
+              className="row list"
+              key={i}
+              onClick={() => this.props.onEmailClick(i)}
+            >
               <div className="col-sm-auto list-item-dark">
                 <h4>
                   <strong>

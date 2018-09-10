@@ -107,7 +107,7 @@ export const sendEmail = (
     }
   );
 
-  dispatch({ type: SEND_EMAIL, payload: {} });
+  dispatch({ type: SEND_EMAIL, payload: res.data });
 };
 
 export const emailError = error => dispatch => {

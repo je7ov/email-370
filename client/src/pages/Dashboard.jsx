@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 
 import ComposeEmail from '../components/ComposeEmail';
 import EmailList from '../components/EmailList';
+import Email from '../components/Email';
 
 import * as actions from '../actions';
 import Auth from '../modules/Auth';
@@ -14,13 +15,17 @@ class Dashboard extends Component {
 
     this.state = {
       composing: false,
-      showing: 'inbox'
+      showing: 'inbox',
+      emailDetails: false,
+      emailIndex: null
     };
 
     this.handleLogout = this.handleLogout.bind(this);
     this.handleSend = this.handleSend.bind(this);
     this.handleComposeChange = this.handleComposeChange.bind(this);
     this.handleShowingChange = this.handleShowingChange.bind(this);
+    this.handleEmailClick = this.handleEmailClick.bind(this);
+    this.handleEmailClose = this.handleEmailClose.bind(this);
   }
 
   componentWillMount() {
@@ -48,7 +53,7 @@ class Dashboard extends Component {
   }
 
   handleShowingChange(showing) {
-    this.setState({ showing });
+    this.setState({ showing, emailDetails: false, emailIndex: null });
   }
 
   async handleLogout(e) {
@@ -62,16 +67,24 @@ class Dashboard extends Component {
     this.setState({ composing: flag });
   }
 
+  handleEmailClick(index) {
+    this.setState({ emailDetails: true, emailIndex: index });
+  }
+
+  handleEmailClose() {
+    this.setState({ emailDetails: false, emailIndex: null });
+  }
+
   renderCompose() {
     return (
       <div className="container floating-container">
         <div className="floating-container-inner">
           <ComposeEmail onSend={this.handleSend} />
           <button
-            className="btn btn-light"
+            className="btn btn-danger close-icon"
             onClick={e => this.handleComposeChange(false)}
           >
-            <span className="close-icon">x</span>
+            x
           </button>
         </div>
       </div>
@@ -82,7 +95,23 @@ class Dashboard extends Component {
     let emails;
     emails = this.props.email[this.state.showing];
 
-    return <EmailList emails={emails} />;
+    return <EmailList emails={emails} onEmailClick={this.handleEmailClick} />;
+  }
+
+  renderEmailDetails(index) {
+    const email = this.props.email[this.state.showing][index];
+
+    return (
+      <div>
+        <button
+          className="btn btn-danger float-right"
+          onClick={this.handleEmailClose}
+        >
+          X
+        </button>
+        <Email data={email} />
+      </div>
+    );
   }
 
   renderNavButtons() {
@@ -140,7 +169,11 @@ class Dashboard extends Component {
         <div className="row flex-fill d-flex">
           <div className="row w-100 dash-body">
             <div className="col-2 sidebar">{this.renderNavButtons()}</div>
-            <div className="col-10 email-list">{this.renderEmails()}</div>
+            <div className="col-10 email-list">
+              {this.state.emailDetails
+                ? this.renderEmailDetails(this.state.emailIndex)
+                : this.renderEmails()}
+            </div>
           </div>
         </div>
 
@@ -153,6 +186,7 @@ class Dashboard extends Component {
         <button
           className="btn btn-success fab"
           onClick={e => this.handleComposeChange(true)}
+          disabled={this.state.composing}
         >
           <span className="fab-icon">+</span>
         </button>
