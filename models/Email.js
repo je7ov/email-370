@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const emailSchema = new Schema({
-  // recepient of email
-  to: {
-    type: String,
-    trim: true
-  },
+  fromUsername: String,
+  fromDomain: String,
+  toUsername: String,
+  toDomain: String,
+  timeSent: Number,
   subject: String,
   body: String
 });

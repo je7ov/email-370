@@ -3,6 +3,7 @@ const User = require('mongoose').model('users');
 const keys = require('../config/keys');
 
 module.exports = (req, res, next) => {
+  console.log(req);
   // If token doesn't exist, send 401 unauthorized
   if (!req.headers.authorization) {
     return res.status(401).end();

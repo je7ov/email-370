@@ -4,6 +4,7 @@ import { Route, Redirect, withRouter } from 'react-router-dom';
 
 import * as actions from './actions';
 import Auth from './modules/Auth';
+import './App.css';
 
 import LoginRegister from './pages/LoginRegister';
 import Dashboard from './pages/Dashboard';

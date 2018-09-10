@@ -7,6 +7,7 @@ const keys = require('./config/keys');
 
 // Load in mongoose models
 require('./models/User');
+require('./models/Email');
 
 // Set up connection to database
 mongoose.connect(

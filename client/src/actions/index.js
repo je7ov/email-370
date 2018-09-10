@@ -6,9 +6,15 @@ import {
   FETCH_USER,
   LOG_IN,
   LOG_OUT,
-  LOADING
+  LOADING,
+  GET_EMAIL,
+  SEND_EMAIL,
+  EMAIL_ERROR
 } from './types';
 
+//**************//
+// AUTH ACTIONS //
+//**************//
 export const getDomains = () => async dispatch => {
   const res = await axios.get('/auth/domains');
 
@@ -73,4 +79,37 @@ export const authError = error => dispatch => {
 
 export const clearAuth = () => dispatch => {
   dispatch({ type: FETCH_USER, payload: {} });
+};
+
+//***************//
+// EMAIL ACTIONS //
+//***************//
+
+export const getEmails = () => async dispatch => {
+  const res = await axios.get('/api/email', {
+    headers: { Authorization: `Bearer ${Auth.getToken()}` }
+  });
+
+  dispatch({ type: GET_EMAIL, payload: res.data });
+};
+
+export const sendEmail = (
+  username,
+  domain,
+  subject,
+  body
+) => async dispatch => {
+  const res = await axios.post(
+    '/api/email',
+    { username, domain, subject, body },
+    {
+      headers: { Authorization: `Bearer ${Auth.getToken()}` }
+    }
+  );
+
+  dispatch({ type: SEND_EMAIL, payload: {} });
+};
+
+export const emailError = error => dispatch => {
+  dispatch({ type: EMAIL_ERROR, payload: { type: 'SEND', error } });
 };
