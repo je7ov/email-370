@@ -1,4 +1,4 @@
-import { SEND_EMAIL, GET_EMAIL, EMAIL_ERROR } from '../actions/types';
+import { SEND_EMAIL, GET_EMAIL, EMAIL_ERROR, LOG_OUT } from '../actions/types';
 
 export default function(
   state = {
@@ -25,6 +25,12 @@ export default function(
     case EMAIL_ERROR:
       newState.success = false;
       newState.error = payload;
+      return newState;
+    case LOG_OUT:
+      newState.inbox = null;
+      newState.sent = null;
+      newState.drafts = null;
+
       return newState;
     default:
       return state;
