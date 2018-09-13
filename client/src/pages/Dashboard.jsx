@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
@@ -100,17 +100,19 @@ class Dashboard extends Component {
 
   renderEmailDetails(index) {
     const email = this.props.email[this.state.showing][index];
+    const closeButton = (
+      <button
+        className="btn btn-danger float-right close-email-icon"
+        onClick={this.handleEmailClose}
+      >
+        X
+      </button>
+    );
 
     return (
-      <div>
-        <button
-          className="btn btn-danger float-right"
-          onClick={this.handleEmailClose}
-        >
-          X
-        </button>
-        <Email data={email} />
-      </div>
+      <Fragment>
+        <Email data={email} closeButton={closeButton} />
+      </Fragment>
     );
   }
 
