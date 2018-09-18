@@ -143,6 +143,19 @@ module.exports = app => {
 
     res.send({ success: true });
   });
+
+  app.delete('/api/email/draft', async (req, res) => {
+    const userId = getUserIdFromRequest(req);
+    let { draftId } = req.body;
+
+    let draftToDelete = await Draft.findOneAndRemove({ _id: draftId });
+
+    if (!draftToDelete) {
+      return res.status(400).json({ success: false, error: 'Draft not found' });
+    }
+
+    res.send({ success: true });
+  });
 };
 
 function getUserIdFromRequest(req) {

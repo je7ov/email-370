@@ -104,15 +104,14 @@ class Dashboard extends Component {
 
   handleDeleteEmail(e, i) {
     e.stopPropagation();
-    console.log(
-      'Deleting email',
-      this.state[this.state.showing][i]._id,
-      this.state.showing
-    );
-    this.props.deleteEmail(
-      this.state[this.state.showing][i]._id,
-      this.state.showing
-    );
+    if (this.state.showing === 'drafts') {
+      this.props.deleteDraft(this.state.drafts[i]._id);
+    } else {
+      this.props.deleteEmail(
+        this.state[this.state.showing][i]._id,
+        this.state.showing
+      );
+    }
   }
 
   renderCompose() {

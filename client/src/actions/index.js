@@ -11,6 +11,7 @@ import {
   SEND_EMAIL,
   DELETE_EMAIL,
   SAVE_DRAFT,
+  DELETE_DRAFT,
   EMAIL_ERROR
 } from './types';
 
@@ -110,10 +111,10 @@ export const sendEmail = (
 };
 
 export const deleteEmail = (emailId, origin) => async dispatch => {
-  let authHeader = getAuthHeader();
-  authHeader.data = { emailId, origin };
+  let config = getAuthHeader();
+  config.data = { emailId, origin };
 
-  const res = await axios.delete('/api/email', authHeader);
+  const res = await axios.delete('/api/email', config);
 
   dispatch(getEmails());
   dispatch({ type: DELETE_EMAIL, payload: res.data });
@@ -132,6 +133,16 @@ export const saveDraft = (to, subject, body) => async dispatch => {
 
   dispatch(getEmails);
   dispatch({ type: SAVE_DRAFT, payload: res.data });
+};
+
+export const deleteDraft = draftId => async dispatch => {
+  let config = getAuthHeader();
+  config.data = { draftId };
+
+  const res = await axios.delete('/api/email/draft', config);
+
+  dispatch(getEmails());
+  dispatch({ type: DELETE_DRAFT, payload: res.data });
 };
 
 export const emailError = error => dispatch => {
