@@ -83,7 +83,7 @@ body,
 
 .list-item-dark {
   background-color: #888;
-  padding: 8px 14px 8px 18px;
+  padding: 8px 14px 8px 12px;
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
   max-width: 40%;
@@ -93,11 +93,17 @@ body,
 
 .list-item-light {
   background-color: #bbb;
-  padding: 12px 12px 8px 12px;
+  padding: 14px 12px 11px 12px;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
   max-height: 4em;
   overflow-y: hidden;
+}
+
+.btn-delete {
+  margin: 0 24px 2px 0;
+  font-size: 0.8em;
+  padding: 4px 8px;
 }
 
 .fab {

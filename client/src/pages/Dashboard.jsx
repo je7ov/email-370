@@ -16,22 +16,38 @@ class Dashboard extends Component {
     this.state = {
       composing: false,
       showing: 'inbox',
+      inbox: [],
+      sent: [],
+      drafts: [],
       emailDetails: false,
       emailIndex: null
     };
 
     this.handleLogout = this.handleLogout.bind(this);
     this.handleSend = this.handleSend.bind(this);
+    this.handleSave = this.handleSave.bind(this);
     this.handleComposeChange = this.handleComposeChange.bind(this);
     this.handleShowingChange = this.handleShowingChange.bind(this);
     this.handleEmailClick = this.handleEmailClick.bind(this);
     this.handleEmailClose = this.handleEmailClose.bind(this);
+    this.handleDeleteEmail = this.handleDeleteEmail.bind(this);
   }
 
   componentWillMount() {
     if (Auth.isUserAuthenticated()) {
       this.props.fetchUser();
       this.props.getEmails();
+      setInterval(this.props.getEmails, 5000);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.email !== prevProps.email) {
+      this.setState({
+        inbox: this.props.email.inbox,
+        sent: this.props.email.sent,
+        drafts: this.props.email.drafts
+      });
     }
   }
 
@@ -49,6 +65,17 @@ class Dashboard extends Component {
     body = encodeURIComponent(body);
 
     this.props.sendEmail(username, domain, subject, body);
+    this.handleComposeChange(false);
+  }
+
+  handleSave(e, to, subject, body) {
+    e.preventDefault();
+
+    to = encodeURIComponent(to);
+    subject = encodeURIComponent(subject);
+    body = encodeURIComponent(body);
+
+    this.props.saveDraft(to, subject, body);
     this.handleComposeChange(false);
   }
 
@@ -75,11 +102,24 @@ class Dashboard extends Component {
     this.setState({ emailDetails: false, emailIndex: null });
   }
 
+  handleDeleteEmail(e, i) {
+    e.stopPropagation();
+    console.log(
+      'Deleting email',
+      this.state[this.state.showing][i]._id,
+      this.state.showing
+    );
+    this.props.deleteEmail(
+      this.state[this.state.showing][i]._id,
+      this.state.showing
+    );
+  }
+
   renderCompose() {
     return (
       <div className="container floating-container">
         <div className="floating-container-inner">
-          <ComposeEmail onSend={this.handleSend} />
+          <ComposeEmail onSend={this.handleSend} onSave={this.handleSave} />
           <button
             className="btn btn-danger close-icon"
             onClick={e => this.handleComposeChange(false)}
@@ -93,13 +133,19 @@ class Dashboard extends Component {
 
   renderEmails() {
     let emails;
-    emails = this.props.email[this.state.showing];
+    emails = this.state[this.state.showing];
 
-    return <EmailList emails={emails} onEmailClick={this.handleEmailClick} />;
+    return (
+      <EmailList
+        emails={emails}
+        onEmailClick={this.handleEmailClick}
+        onDelete={this.handleDeleteEmail}
+      />
+    );
   }
 
   renderEmailDetails(index) {
-    const email = this.props.email[this.state.showing][index];
+    const email = this.state[this.state.showing][index];
     const closeButton = (
       <button
         className="btn btn-danger float-right close-email-icon"

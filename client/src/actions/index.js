@@ -9,6 +9,8 @@ import {
   LOADING,
   GET_EMAIL,
   SEND_EMAIL,
+  DELETE_EMAIL,
+  SAVE_DRAFT,
   EMAIL_ERROR
 } from './types';
 
@@ -86,9 +88,7 @@ export const clearAuth = () => dispatch => {
 //***************//
 
 export const getEmails = () => async dispatch => {
-  const res = await axios.get('/api/email', {
-    headers: { Authorization: `Bearer ${Auth.getToken()}` }
-  });
+  const res = await axios.get('/api/email', getAuthHeader());
 
   dispatch({ type: GET_EMAIL, payload: res.data });
 };
@@ -102,14 +102,43 @@ export const sendEmail = (
   const res = await axios.post(
     '/api/email',
     { username, domain, subject, body },
-    {
-      headers: { Authorization: `Bearer ${Auth.getToken()}` }
-    }
+    getAuthHeader()
   );
 
+  dispatch(getEmails());
   dispatch({ type: SEND_EMAIL, payload: res.data });
+};
+
+export const deleteEmail = (emailId, origin) => async dispatch => {
+  let authHeader = getAuthHeader();
+  authHeader.data = { emailId, origin };
+
+  const res = await axios.delete('/api/email', authHeader);
+
+  dispatch(getEmails());
+  dispatch({ type: DELETE_EMAIL, payload: res.data });
+};
+
+export const saveDraft = (to, subject, body) => async dispatch => {
+  const res = await axios.post(
+    '/api/email/draft',
+    {
+      to,
+      subject,
+      body
+    },
+    getAuthHeader()
+  );
+
+  dispatch(getEmails);
+  dispatch({ type: SAVE_DRAFT, payload: res.data });
 };
 
 export const emailError = error => dispatch => {
   dispatch({ type: EMAIL_ERROR, payload: { type: 'SEND', error } });
 };
+
+// HELPER FUNCTIONS //
+function getAuthHeader() {
+  return { headers: { Authorization: `Bearer ${Auth.getToken()}` } };
+}

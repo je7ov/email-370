@@ -17,7 +17,7 @@ export default function(
     case GET_EMAIL:
       newState.inbox = payload.inbox;
       newState.sent = payload.sent;
-      newState.drafts = [];
+      newState.drafts = payload.drafts;
       return newState;
     case SEND_EMAIL:
       newState.success = payload.success;

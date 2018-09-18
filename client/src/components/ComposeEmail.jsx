@@ -85,6 +85,20 @@ class ComposeEmail extends Component {
         >
           Send
         </button>
+
+        <button
+          className="btn btn-secondary float-right mr-2"
+          onClick={e =>
+            this.props.onSave(
+              e,
+              this.state.to,
+              this.state.subject,
+              this.state.body
+            )
+          }
+        >
+          Save as Draft
+        </button>
       </form>
     );
   }
