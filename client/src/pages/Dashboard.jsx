@@ -5,15 +5,18 @@ import { Redirect } from 'react-router-dom';
 import ComposeEmail from '../components/ComposeEmail';
 import EmailList from '../components/EmailList';
 import Email from '../components/Email';
+import Draft from '../components/Draft';
 
 import * as actions from '../actions';
 import Auth from '../modules/Auth';
+import { deepEquals } from '../helpers';
 
 class Dashboard extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      loading: true,
       composing: false,
       showing: 'inbox',
       inbox: [],
@@ -33,6 +36,18 @@ class Dashboard extends Component {
     this.handleDeleteEmail = this.handleDeleteEmail.bind(this);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      !this.state.loading &&
+      deepEquals(this.props.email, nextProps.email) &&
+      deepEquals(this.state, nextState)
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
   componentWillMount() {
     if (Auth.isUserAuthenticated()) {
       this.props.fetchUser();
@@ -46,7 +61,8 @@ class Dashboard extends Component {
       this.setState({
         inbox: this.props.email.inbox,
         sent: this.props.email.sent,
-        drafts: this.props.email.drafts
+        drafts: this.props.email.drafts,
+        loading: false
       });
     }
   }
@@ -104,13 +120,18 @@ class Dashboard extends Component {
 
   handleDeleteEmail(e, i) {
     e.stopPropagation();
-    if (this.state.showing === 'drafts') {
-      this.props.deleteDraft(this.state.drafts[i]._id);
-    } else {
-      this.props.deleteEmail(
-        this.state[this.state.showing][i]._id,
-        this.state.showing
-      );
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this email?'
+    );
+    if (confirmed) {
+      if (this.state.showing === 'drafts') {
+        this.props.deleteDraft(this.state.drafts[i]._id);
+      } else {
+        this.props.deleteEmail(
+          this.state[this.state.showing][i]._id,
+          this.state.showing
+        );
+      }
     }
   }
 
@@ -145,18 +166,14 @@ class Dashboard extends Component {
 
   renderEmailDetails(index) {
     const email = this.state[this.state.showing][index];
-    const closeButton = (
-      <button
-        className="btn btn-danger float-right close-email-icon"
-        onClick={this.handleEmailClose}
-      >
-        X
-      </button>
-    );
 
     return (
       <Fragment>
-        <Email data={email} closeButton={closeButton} />
+        {this.state.showing === 'drafts' ? (
+          <Draft data={email} handleClose={this.handleEmailClose} />
+        ) : (
+          <Email data={email} handleClose={this.handleEmailClose} />
+        )}
       </Fragment>
     );
   }

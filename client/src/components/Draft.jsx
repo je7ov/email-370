@@ -24,7 +24,7 @@ class Email extends Component {
         <div className="row">
           <h4>
             <strong>To: </strong>
-            {`${data.toUsername}@${data.toDomain}`}
+            {data.to}
           </h4>
         </div>
         <div className="row">
