@@ -144,6 +144,17 @@ module.exports = app => {
     res.send({ success: true });
   });
 
+  app.post('/api/email/draft', async (req, res) => {
+    const userId = getUserIdFromRequest(req);
+    let { draftId, to, subject, body } = req.body;
+
+    let draftToEdit = await Draft.findById(draftId);
+
+    console.log(draftId, to, subject, body);
+
+    res.send({ success: true });
+  });
+
   app.delete('/api/email/draft', async (req, res) => {
     const userId = getUserIdFromRequest(req);
     let { draftId } = req.body;

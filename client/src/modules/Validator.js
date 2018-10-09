@@ -1,11 +1,11 @@
 const usernameConfig = {
   min: 4,
-  max: 16
+  max: 12
 };
 
 const passwordConfig = {
-  min: 6,
-  max: 24
+  min: 4,
+  max: 12
 };
 
 class Validator {

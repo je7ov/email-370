@@ -23,7 +23,9 @@ class Dashboard extends Component {
       sent: [],
       drafts: [],
       emailDetails: false,
-      emailIndex: null
+      emailIndex: null,
+      draftEdit: false,
+      composeData: { to: '', subject: '', body: '' }
     };
 
     this.handleLogout = this.handleLogout.bind(this);
@@ -91,6 +93,15 @@ class Dashboard extends Component {
     subject = encodeURIComponent(subject);
     body = encodeURIComponent(body);
 
+    if (this.state.draftEdit) {
+      this.props.editDraft(
+        this.state.emailIndex,
+        this.state.to,
+        this.state.subject,
+        this.state.body
+      );
+    }
+
     this.props.saveDraft(to, subject, body);
     this.handleComposeChange(false);
   }
@@ -107,11 +118,28 @@ class Dashboard extends Component {
   }
 
   handleComposeChange(flag) {
-    this.setState({ composing: flag });
+    this.setState({
+      composing: flag,
+      draftEdit: false,
+      composeData: flag
+        ? this.state.composeData
+        : { to: '', body: '', subject: '' }
+    });
   }
 
   handleEmailClick(index) {
-    this.setState({ emailDetails: true, emailIndex: index });
+    const { to, subject, body } = this.state.drafts[index];
+
+    if (this.state.showing === 'drafts') {
+      this.setState({
+        composing: true,
+        composeData: { to, subject, body },
+        emailIndex: index,
+        draftEdit: true
+      });
+    } else {
+      this.setState({ emailDetails: true, emailIndex: index });
+    }
   }
 
   handleEmailClose() {
@@ -121,7 +149,9 @@ class Dashboard extends Component {
   handleDeleteEmail(e, i) {
     e.stopPropagation();
     const confirmed = window.confirm(
-      'Are you sure you want to delete this email?'
+      `Are you sure you want to delete this ${
+        this.state.showing === 'drafts' ? 'draft' : 'email'
+      }?`
     );
     if (confirmed) {
       if (this.state.showing === 'drafts') {
@@ -139,7 +169,11 @@ class Dashboard extends Component {
     return (
       <div className="container floating-container">
         <div className="floating-container-inner">
-          <ComposeEmail onSend={this.handleSend} onSave={this.handleSave} />
+          <ComposeEmail
+            onSend={this.handleSend}
+            onSave={this.handleSave}
+            data={this.state.composeData}
+          />
           <button
             className="btn btn-danger close-icon"
             onClick={e => this.handleComposeChange(false)}

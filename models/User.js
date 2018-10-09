@@ -9,7 +9,7 @@ const userSchema = new Schema({
     type: String,
     trim: true,
     minlength: 4,
-    maxlength: 16
+    maxlength: 12
   },
   // domain user's email account is in
   domain: {
@@ -19,7 +19,8 @@ const userSchema = new Schema({
   // user's hashed password
   password: {
     type: String,
-    minLength: 6
+    minlength: 4,
+    maxlength: 12
   }
 });
 

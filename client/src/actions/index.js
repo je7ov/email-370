@@ -11,6 +11,7 @@ import {
   SEND_EMAIL,
   DELETE_EMAIL,
   SAVE_DRAFT,
+  EDIT_DRAFT,
   DELETE_DRAFT,
   EMAIL_ERROR
 } from './types';
@@ -133,6 +134,24 @@ export const saveDraft = (to, subject, body) => async dispatch => {
 
   dispatch(getEmails);
   dispatch({ type: SAVE_DRAFT, payload: res.data });
+};
+
+export const editDraft = (draftId, to, subject, body) => async dispatch => {
+  let config = getAuthHeader();
+
+  const res = await axios.post(
+    '/api/email/draft',
+    {
+      draftId,
+      to,
+      subject,
+      body
+    },
+    getAuthHeader()
+  );
+
+  dispatch(getEmails());
+  dispatch({ type: EDIT_DRAFT, payload: res.data });
 };
 
 export const deleteDraft = draftId => async dispatch => {

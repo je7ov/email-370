@@ -5,11 +5,19 @@ class ComposeEmail extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      to: '',
-      subject: '',
-      body: ''
-    };
+    if (props.data) {
+      this.state = {
+        to: props.data.to || '',
+        subject: props.data.subject || '',
+        body: props.data.body || ''
+      };
+    } else {
+      this.state = {
+        to: '',
+        subject: '',
+        body: ''
+      };
+    }
 
     this.handleToChange = this.handleToChange.bind(this);
     this.handleSubjectChange = this.handleSubjectChange.bind(this);

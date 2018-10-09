@@ -11,5 +11,6 @@ export const GET_EMAIL = 'get_email';
 export const SEND_EMAIL = 'send_email';
 export const DELETE_EMAIL = 'delete_email';
 export const SAVE_DRAFT = 'save_draft';
+export const EDIT_DRAFT = 'edit_draft';
 export const DELETE_DRAFT = 'delete_draft';
 export const EMAIL_ERROR = 'email_error';
