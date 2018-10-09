@@ -115,7 +115,7 @@ module.exports = app => {
 
   app.post('/api/email/draft', async (req, res) => {
     const userId = getUserIdFromRequest(req);
-    let { to, subject, body } = req.body;
+    let { to, subject, body, edit, draftId } = req.body;
     to = decodeURIComponent(to);
     subject = decodeURIComponent(subject);
     body = decodeURIComponent(body);
@@ -128,29 +128,24 @@ module.exports = app => {
         .json({ success: false, error: '"From" user is not found' });
     }
 
-    const newDraft = await new Draft({
-      userId,
-      fromUsername: userFrom.username,
-      fromDomain: userFrom.domain,
-      to,
-      subject,
-      body
-    })
-      .save()
-      .catch(err => {
-        return { success: false, error: err.message };
+    if (edit) {
+      const editDraft = await Draft.findByIdAndUpdate(draftId, {
+        $set: { to, subject, body }
       });
-
-    res.send({ success: true });
-  });
-
-  app.post('/api/email/draft', async (req, res) => {
-    const userId = getUserIdFromRequest(req);
-    let { draftId, to, subject, body } = req.body;
-
-    let draftToEdit = await Draft.findById(draftId);
-
-    console.log(draftId, to, subject, body);
+    } else {
+      const newDraft = await new Draft({
+        userId,
+        fromUsername: userFrom.username,
+        fromDomain: userFrom.domain,
+        to,
+        subject,
+        body
+      })
+        .save()
+        .catch(err => {
+          return { success: false, error: err.message };
+        });
+    }
 
     res.send({ success: true });
   });

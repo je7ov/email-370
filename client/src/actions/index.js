@@ -145,7 +145,8 @@ export const editDraft = (draftId, to, subject, body) => async dispatch => {
       draftId,
       to,
       subject,
-      body
+      body,
+      edit: true
     },
     getAuthHeader()
   );
