@@ -59,7 +59,10 @@ class Dashboard extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.email !== prevProps.email) {
+    if (!this.props.email.success && this.props.email.error) {
+      window.alert('Please enter a correct email');
+      this.props.clearEmailError();
+    } else if (this.props.email !== prevProps.email) {
       this.setState({
         inbox: this.props.email.inbox,
         sent: this.props.email.sent,
@@ -84,6 +87,12 @@ class Dashboard extends Component {
 
     this.props.sendEmail(username, domain, subject, body);
     this.handleComposeChange(false);
+
+    if (this.state.draftEdit) {
+      this.props.deleteDraft(
+        this.props.email.drafts[this.state.emailIndex]._id
+      );
+    }
   }
 
   handleSave(e, to, subject, body) {
@@ -95,14 +104,15 @@ class Dashboard extends Component {
 
     if (this.state.draftEdit) {
       this.props.editDraft(
-        this.state.emailIndex,
-        this.state.to,
-        this.state.subject,
-        this.state.body
+        this.props.email.drafts[this.state.emailIndex]._id,
+        to,
+        subject,
+        body
       );
+    } else {
+      this.props.saveDraft(to, subject, body);
     }
 
-    this.props.saveDraft(to, subject, body);
     this.handleComposeChange(false);
   }
 
@@ -128,9 +138,9 @@ class Dashboard extends Component {
   }
 
   handleEmailClick(index) {
-    const { to, subject, body } = this.state.drafts[index];
-
     if (this.state.showing === 'drafts') {
+      const { to, subject, body } = this.state.drafts[index];
+
       this.setState({
         composing: true,
         composeData: { to, subject, body },

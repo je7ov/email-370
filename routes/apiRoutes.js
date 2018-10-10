@@ -120,6 +120,8 @@ module.exports = app => {
     subject = decodeURIComponent(subject);
     body = decodeURIComponent(body);
 
+    console.log(to, subject, body, edit, draftId);
+
     let userFrom = await User.findById(userId);
 
     if (!userFrom) {

@@ -142,11 +142,11 @@ export const editDraft = (draftId, to, subject, body) => async dispatch => {
   const res = await axios.post(
     '/api/email/draft',
     {
-      draftId,
       to,
       subject,
       body,
-      edit: true
+      edit: true,
+      draftId
     },
     getAuthHeader()
   );
@@ -167,6 +167,10 @@ export const deleteDraft = draftId => async dispatch => {
 
 export const emailError = error => dispatch => {
   dispatch({ type: EMAIL_ERROR, payload: { type: 'SEND', error } });
+};
+
+export const clearEmailError = () => dispatch => {
+  dispatch({ type: EMAIL_ERROR, payload: { type: 'SEND', error: null } });
 };
 
 // HELPER FUNCTIONS //
