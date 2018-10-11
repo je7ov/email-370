@@ -108,11 +108,8 @@ body,
 
 .fab {
   position: absolute;
-  bottom: 16px;
-  right: 16px;
-  /* background-color: red;
-  color: #eee;
-  margin: 0; */
+  bottom: 32px;
+  right: 32px;
   padding: 2px 24px;
   border-radius: 100px;
 }

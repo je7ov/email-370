@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 
 class Email extends Component {
   render() {
@@ -32,6 +33,12 @@ class Email extends Component {
             <strong>Subject: </strong>
             {data.subject}
           </h4>
+        </div>
+        <div className="row">
+          <p>
+            Sent at{' '}
+            {moment(data.timeSent).format('dddd, MMMM Do YYYY, h:mm:ss a')}
+          </p>
         </div>
         <div className="row flex-fill d-flex email-body">
           <h5>{data.body}</h5>

@@ -285,10 +285,6 @@ class Dashboard extends Component {
           </div>
         </div>
 
-        {/* <div className="row">
-          <h4>Footer</h4>
-        </div> */}
-
         {this.state.composing ? this.renderCompose() : null}
 
         <button
