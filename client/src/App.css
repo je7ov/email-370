@@ -93,10 +93,10 @@ body,
 
 .list-item-light {
   background-color: #bbb;
-  padding: 14px 12px 11px 12px;
+  padding: 15px 12px 11px 12px;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
-  max-height: 4em;
+  max-height: 50px;
   overflow-y: hidden;
 }
 
@@ -162,4 +162,11 @@ body,
 
 .btn-hor-list {
   margin-right: 8px;
+}
+
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
 }
