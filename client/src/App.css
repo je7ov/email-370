@@ -143,6 +143,10 @@ body,
   font-weight: bold;
 }
 
+#compose-body {
+  font-family: 'Courier New', Courier, monospace;
+}
+
 .email-container {
   position: absolute;
   top: 0;
@@ -153,4 +157,9 @@ body,
 .email-body {
   background-color: white;
   padding: 12px;
+  margin-bottom: 12px;
+}
+
+.btn-hor-list {
+  margin-right: 8px;
 }

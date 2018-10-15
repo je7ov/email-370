@@ -1,9 +1,14 @@
-import React, { Component } from 'react';
-import moment from 'moment';
+import React, { Component } from "react";
+import moment from "moment";
 
 class Email extends Component {
   render() {
-    const { data } = this.props;
+    const {
+      data,
+      handleForwardClick,
+      handleReplyClick,
+      handleClose
+    } = this.props;
 
     return (
       <div className="container-fluid d-flex h-100 flex-column email-container">
@@ -16,7 +21,7 @@ class Email extends Component {
           <div className="col-sm-auto align-self-end">
             <button
               className="btn btn-danger float-right close-email-icon"
-              onClick={this.props.handleClose}
+              onClick={handleClose}
             >
               X
             </button>
@@ -36,12 +41,25 @@ class Email extends Component {
         </div>
         <div className="row">
           <p>
-            Sent at{' '}
-            {moment(data.timeSent).format('dddd, MMMM Do YYYY, h:mm:ss a')}
+            Sent at{" "}
+            {moment(data.timeSent).format("dddd, MMMM Do YYYY, h:mm:ss a")}
           </p>
         </div>
         <div className="row flex-fill d-flex email-body">
-          <h5>{data.body}</h5>
+          <h5>
+            <pre>{data.body}</pre>
+          </h5>
+        </div>
+        <div className="row">
+          <button
+            className="btn btn-info btn-hor-list"
+            onClick={handleForwardClick}
+          >
+            Forward
+          </button>
+          <button className="btn btn-info" onClick={handleReplyClick}>
+            Reply
+          </button>
         </div>
       </div>
     );

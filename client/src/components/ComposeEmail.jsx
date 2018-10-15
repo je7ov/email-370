@@ -70,9 +70,9 @@ class ComposeEmail extends Component {
         </div>
 
         <div className="form-group">
-          <label htmlFor="body">Body:</label>
+          <label htmlFor="compose-body">Body:</label>
           <textarea
-            id="body"
+            id="compose-body"
             rows="15"
             className={'form-control ' + css(styles['no-resize'])}
             onChange={this.handleBodyChange}

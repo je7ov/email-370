@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class EmailList extends Component {
   render() {
@@ -18,7 +18,7 @@ class EmailList extends Component {
               key={i}
               onClick={() => this.props.onEmailClick(i)}
             >
-              <div className="col-sm-auto list-item-dark">
+              <div className="col-sm-auto h-100 list-item-dark">
                 <button
                   className="btn btn-danger btn-delete"
                   onClick={e => this.props.onDelete(e, i)}
@@ -27,7 +27,7 @@ class EmailList extends Component {
                 </button>
                 <h4>
                   <strong>
-                    {email.fromUsername}@{email.fromDomain}:{' '}
+                    {email.fromUsername}@{email.fromDomain}:{" "}
                   </strong>
                 </h4>
                 <h5>{email.subject}</h5>

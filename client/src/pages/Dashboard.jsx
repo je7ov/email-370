@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import moment from 'moment';
 
 import ComposeEmail from '../components/ComposeEmail';
 import EmailList from '../components/EmailList';
@@ -14,6 +15,9 @@ import { deepEquals } from '../helpers';
 class Dashboard extends Component {
   constructor(props) {
     super(props);
+
+    this.divider =
+      '\n===============================================================\n';
 
     this.state = {
       loading: true,
@@ -36,6 +40,8 @@ class Dashboard extends Component {
     this.handleEmailClick = this.handleEmailClick.bind(this);
     this.handleEmailClose = this.handleEmailClose.bind(this);
     this.handleDeleteEmail = this.handleDeleteEmail.bind(this);
+    this.handleReplyClick = this.handleReplyClick.bind(this);
+    this.handleForwardClick = this.handleForwardClick.bind(this);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -175,6 +181,56 @@ class Dashboard extends Component {
     }
   }
 
+  handleReplyClick() {
+    const { fromUsername, fromDomain, subject, body, timeSent } = this.state[
+      this.state.showing
+    ][this.state.emailIndex];
+
+    const fromInformation = `${fromUsername}@${fromDomain} message on ${moment(
+      timeSent
+    ).format('dddd, MMMM Do YYYY, h:mm:ss a')}`;
+
+    let divider = '\n';
+    for (let i = 0; i < fromInformation.length; i++) divider += '=';
+    divider += '\n';
+
+    console.log(divider);
+
+    const replyBody = `\n${divider}${fromInformation}${divider}${body}`;
+
+    this.setState({
+      composeData: {
+        to: `${fromUsername}@${fromDomain}`,
+        subject: `REPLY: ${subject}`,
+        body: replyBody
+      },
+      composing: true
+    });
+  }
+
+  handleForwardClick() {
+    const { fromUsername, fromDomain, subject, body, timeSent } = this.state[
+      this.state.showing
+    ][this.state.emailIndex];
+
+    const fromInformation = `${fromUsername}@${fromDomain} message on ${moment(
+      timeSent
+    ).format('dddd, MMMM Do YYYY, h:mm:ss a')}`;
+
+    let divider = '\n';
+    for (let i = 0; i < fromInformation.length; i++) divider += '=';
+    divider += '\n';
+
+    this.setState({
+      composeData: {
+        to: '',
+        subject: `FWD: ${subject}`,
+        body: `${divider}${fromInformation}${divider}${body}`
+      },
+      composing: true
+    });
+  }
+
   renderCompose() {
     return (
       <div className="container floating-container">
@@ -216,7 +272,12 @@ class Dashboard extends Component {
         {this.state.showing === 'drafts' ? (
           <Draft data={email} handleClose={this.handleEmailClose} />
         ) : (
-          <Email data={email} handleClose={this.handleEmailClose} />
+          <Email
+            data={email}
+            handleClose={this.handleEmailClose}
+            handleReplyClick={this.handleReplyClick}
+            handleForwardClick={this.handleForwardClick}
+          />
         )}
       </Fragment>
     );
